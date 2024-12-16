@@ -3,6 +3,10 @@
 ## Visão Geral
 Este é o código para o **Projeto Robô Atom**, desenvolvido como parte de um projeto acadêmico na Universidade Salvador (UNIFACS). Ele utiliza uma placa ESP32 para controlar um sistema de motores através de uma interface web, permitindo manipular articulações e uma garra em um braço robótico. A interface foi projetada para ser responsiva e acessível em dispositivos móveis e desktops.
 
+## Imagem
+![Projeto_Atom](https://github.com/user-attachments/assets/a65db566-fc82-4508-947e-e1d5dc7038c9)
+
+
 ## Funcionalidades
 - Controle remoto de quatro motores (três articulações e uma garra).
 - Interface web responsiva com botões para aumentar e diminuir os movimentos.
