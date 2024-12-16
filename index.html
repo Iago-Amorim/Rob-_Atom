@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Projeto Robô Atom</title>
+        <style>
+            :root {
+                --bg-color: #e3f2fd;
+                --text-color: #1e293b;
+                --header-footer-color: #90caf9;
+                --header-footer-text-color: #0d47a1;
+                --button-color: #2c89b7;
+                --button-hover-color: #0b4b6b;
+                --button-ativado-color: #2cb731;
+                --button-ativado-hover-color: #106b0b;
+                --card-bg-color: #f3f4f6;
+                --card-border-color: #546e7a;
+                --modal-bg-color: #e3f2fd;
+                --modal-border-color: #546e7a;
+                --close-btn-color: #b71c1c;
+                --close-btn-hover-color: #d32f2f;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                font-family: Arial, sans-serif;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            header {
+                background-color: var(--header-footer-color);
+                color: var(--header-footer-text-color);
+                width: 100%;
+                padding: 1em;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            header h1 {
+                text-align: center;
+                flex: 1;
+                font-size: 1.5em;
+            }
+
+            header button {
+                background-color: var(--button-color);
+                color: #f1f5f9;
+                padding: 0.8em 1.5em;
+                border: 0;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                font-size: 1em;
+                border-radius: 0.5em;
+            }
+
+            header button:hover {
+                background-color: var(--button-hover-color);
+            }
+
+            main {
+                flex: 1;
+                padding: 2em 3em;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2em;
+                justify-content: center;
+                align-items: flex-start;
+            }
+
+            main div {
+                background-color: var(--card-bg-color);
+                width: calc(20% - 1em);
+                padding: 1.5em 1em 1em 1em;
+                border-radius: 0.5em;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border: 1px solid var(--card-border-color);
+            }
+
+            main div div {
+                padding: none;
+                box-shadow: none;
+                border: none;
+            }
+
+            main h2 {
+                font-size: 1.2em;
+                text-align: center;
+                border-bottom: 2px solid var(--card-border-color);
+                width: 100%;
+                padding-bottom: 0.5em;
+                color: var(--text-color);
+            }
+
+            .btn_aumentar,
+            .btn_diminuir {
+                font-size: 2em;
+                width: 4em;
+                height: 4em;
+                margin: 0.5em;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                background-color: var(--button-color);
+                color: #f1f5f9;
+                border: none;
+                border-radius: 5%;
+            }
+
+            .btn_aumentar:hover,
+            .btn_diminuir:hover {
+                background-color: var(--button-hover-color);
+            }
+
+            .btn_aumentar {
+                rotate: -90deg;
+            }
+
+            .btn_diminuir {
+                rotate: 90deg;
+            }
+
+            .btn_ativado:hover, .btn_ativado:active {
+                background-color: var(--button-ativado-hover-color) !important;
+            }
+
+            footer {
+                padding: 1em;
+                background-color: var(--header-footer-color);
+                text-align: center;
+                color: var(--header-footer-text-color);
+            }
+
+            .modal {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: var(--modal-bg-color);
+                padding: 2em;
+                border-radius: 0.75em;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                width: 90%;
+                max-width: 500px;
+                z-index: 1000;
+                display: none;
+            }
+
+            .modal.active {
+                display: block;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 2px solid var(--modal-border-color);
+                padding-bottom: 1em;
+                margin-bottom: 1.5em;
+            }
+
+            .modal-header h2 {
+                font-size: 1.5em;
+                color: var(--text-color);
+            }
+
+            .modal-header .close-btn {
+                background-color: var(--close-btn-color);
+                color: #fff;
+                border: none;
+                font-size: 1.2em;
+                cursor: pointer;
+                border-radius: 5%;
+                width: 2em;
+                height: 2em;
+                padding: 0.1em 0.5em;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: background-color 0.3s ease;
+            }
+
+            .modal-header .close-btn:hover {
+                background-color: var(--close-btn-hover-color);
+            }
+
+            .modal-section {
+                padding-bottom: 0.5em;
+            }
+
+            .modal-section h3 {
+                padding-bottom: 0.2em;
+            }
+
+            .modal-section p {
+                padding-left: 1em;
+            }
+
+            @media (max-width: 1000px) {
+                main {
+                    gap: 1em;
+                }
+
+                main div {
+                    width: calc(24% - 0.5em);
+                    padding: 1em 1em 0.5em 1em;
+                }
+
+                main div div {
+                    padding: none;
+                    box-shadow: none;
+                    border: none;
+                }
+            }
+
+            @media (max-width: 700px) {
+                main div {
+                    width: 100%;
+                }
+                .modal {
+                    width: 95%;
+                }
+                .modal-header h2 {
+                    font-size: 1.2em;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Projeto Robô Atom</h1>
+            <button aria-label="Sobre">Sobre</button>
+        </header>
+        <main>
+            <div>
+                <h2>Articulação 1</h2>
+                <div id="articulacao_1">
+                    <button
+                        class="btn_aumentar"
+                        data-route="/motor1_fwd"
+                        aria-label="Aumentar"
+                    ></button>
+                    <button
+                        class="btn_diminuir"
+                        data-route="/motor1_rev"
+                        aria-label="Diminuir"
+                    ></button>
+                </div>
+            </div>
+            <div>
+                <h2>Articulação 2</h2>
+                <div id="articulacao_2">
+                    <button
+                        class="btn_aumentar"
+                        data-route="/motor2_fwd"
+                        aria-label="Aumentar"
+                    ></button>
+                    <button
+                        class="btn_diminuir"
+                        data-route="/motor2_rev"
+                        aria-label="Diminuir"
+                    ></button>
+                </div>
+            </div>
+            <div>
+                <h2>Articulação 3</h2>
+                <div id="articulacao_3">
+                    <button
+                        class="btn_aumentar"
+                        data-route="/motor3_fwd"
+                        aria-label="Aumentar"
+                    ></button>
+                    <button
+                        class="btn_diminuir"
+                        data-route="/motor3_rev"
+                        aria-label="Diminuir"
+                    ></button>
+                </div>
+            </div>
+            <div>
+                <h2>Garra</h2>
+                <div id="garra">
+                    <button
+                        class="btn_aumentar"
+                        data-route="/motor4_fwd"
+                        aria-label="Aumentar"
+                    ></button>
+                    <button
+                        class="btn_diminuir"
+                        data-route="/motor4_rev"
+                        aria-label="Diminuir"
+                    ></button>
+                </div>
+            </div>
+        </main>
+        <div class="modal" id="infoModal">
+            <div class="modal-header">
+                <h2>Projeto A3 de Eletrônica Industrial da Universidade Salvador – UNIFACS</h2>
+                <button class="close-btn" aria-label="Fechar modal">X</button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-section">
+                    <h3>Professores:</h3>
+                    <p>Euclério Barbosa Ornellas Filho</p>
+                    <p>Paulo Cesar da Silva Emanuel</p>
+                </div>
+                <div class="modal-section">
+                    <h3>Alunos:</h3>
+                    <p>Marcos Caique Campelo de Miranda</p>
+                    <p>Maria Eduarda Santos da Silva</p>
+                    <p>Júlia Moreira Silva dos Santos</p>
+                    <p>Gabriel Sapucaia Carvalho</p>
+                    <p>Iago Assunção Amorim</p>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>&copy; 2024 Projeto Atom.</p>
+        </footer>
+        <script>
+            let currentInterval = null;
+
+            async function controlMotor(route) {
+                try {
+                    const response = await fetch(route);
+                    if (!response.ok) {
+                        throw new Error(`Erro na requisição para ${route}: ${response.status}`);
+                    }
+                    return await response.text();
+                } catch (error) {
+                    console.error("Erro ao controlar motor:", error);
+                }
+            }
+
+            function startRequests(button) {
+                stopCurrentRequests();
+                const route = button.dataset.route;
+                controlMotor(route);
+                currentInterval = setInterval(() => controlMotor(route), 100);
+            }
+
+            function stopCurrentRequests() {
+                if (currentInterval) {
+                    clearInterval(currentInterval);
+                    currentInterval = null;
+                }
+            }
+
+            function setupMotorButtons() {
+                const buttons = document.querySelectorAll(".btn_aumentar, .btn_diminuir");
+
+                buttons.forEach((button) => {
+                    button.addEventListener("mousedown", () => startRequests(button));
+                    button.addEventListener("mouseup", stopCurrentRequests);
+                    button.addEventListener("mouseleave", stopCurrentRequests);
+                    button.addEventListener("touchstart", (event) => {
+                        event.preventDefault();
+                        startRequests(button);
+                    });
+                });
+
+                document.addEventListener("touchend", stopCurrentRequests);
+                document.addEventListener("touchcancel", stopCurrentRequests);
+                window.addEventListener("mouseup", stopCurrentRequests);
+            }
+
+            async function atualizarBotoes() {
+                try {
+                    const response = await fetch("/informacao");
+                    if (!response.ok) {
+                        throw new Error(`Erro na requisição de atualização: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    const botoes = [
+                        document.querySelectorAll("#articulacao_1 button"),
+                        document.querySelectorAll("#articulacao_2 button"),
+                        document.querySelectorAll("#articulacao_3 button"),
+                        document.querySelectorAll("#garra button"),
+                    ];
+
+                    Object.keys(data).forEach((key, index) => {
+                        const valor = data[key];
+                        if (botoes[index]) {
+                            botoes[index].forEach((button) => {
+                                button.classList.toggle("btn_ativado", valor === 1);
+                            });
+                        }
+                    });
+                } catch (error) {
+                    console.error("Erro ao buscar dados:", error);
+                }
+            }
+
+            function addSvgToButtons() {
+                const buttons = document.querySelectorAll(".btn_aumentar, .btn_diminuir");
+                const svgIcon = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+            <g>
+                <path d="M31.356,25.677l38.625,22.3c1.557,0.899,1.557,3.147,0,4.046l-38.625,22.3c-1.557,0.899-3.504-0.225-3.504-2.023V27.7C27.852,25.902,29.798,24.778,31.356,25.677z"/>
+                </g>
+        </svg>`;
+                buttons.forEach((button) => {
+                    button.innerHTML = svgIcon + button.innerHTML;
+                });
+            }
+
+            function setupAutoUpdate(interval = 500) {
+                atualizarBotoes();
+                setInterval(atualizarBotoes, interval);
+            }
+
+            function setupModalButtons() {
+                document.querySelector("header button").addEventListener("click", () => {
+                    document.getElementById("infoModal").classList.toggle("active");
+                });
+
+                document.querySelector(".modal button").addEventListener("click", () => {
+                    document.getElementById("infoModal").classList.remove("active");
+                });
+            }
+
+            setupModalButtons();
+            addSvgToButtons();
+            setupAutoUpdate();
+
+            document.addEventListener("DOMContentLoaded", setupMotorButtons);
+        </script>
+    </body>
+</html>
